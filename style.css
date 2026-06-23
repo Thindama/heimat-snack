@@ -1,0 +1,1520 @@
+/* ==========================================================================
+   HEIMAT SNACK — Style Sheet
+   A premium, cinematic German Imbiss landing page.
+   Handmade. Authentic. Kein Schnickschnack.
+   ========================================================================== */
+
+/* ==========================================================================
+   0. CUSTOM PROPERTIES
+   ========================================================================== */
+:root {
+  /* Colors */
+  --espresso: #1A120B;
+  --mustard: #D4A017;
+  --cream: #F5F0E8;
+  --charcoal: #2C2C2C;
+  --paprika: #C0392B;
+  --parsley: #5B7A2E;
+  --smoke: rgba(26, 18, 11, 0.7);
+
+  /* Fonts */
+  --font-display: 'Playfair Display', serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-hand: 'Caveat', cursive;
+
+  /* Shadows */
+  --shadow-hard: 8px 8px 0 rgba(26, 18, 11, 0.15);
+  --shadow-lift: 12px 12px 0 rgba(26, 18, 11, 0.2);
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 8rem;
+}
+
+/* ==========================================================================
+   1. CSS RESET / NORMALIZE
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--espresso);
+  background-color: var(--cream);
+  overflow-x: hidden;
+  position: relative;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+address {
+  font-style: normal;
+}
+
+/* ==========================================================================
+   2. PAPER GRAIN OVERLAY (Body ::after)
+   ========================================================================== */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ==========================================================================
+   3. SELECTION & FOCUS
+   ========================================================================== */
+::selection {
+  background-color: var(--mustard);
+  color: var(--espresso);
+}
+
+::-moz-selection {
+  background-color: var(--mustard);
+  color: var(--espresso);
+}
+
+/* Skip to content */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: var(--space-sm);
+  z-index: 10001;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--mustard);
+  color: var(--espresso);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  border-radius: 0 0 4px 4px;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Focus states */
+*:focus-visible {
+  outline: 3px solid var(--mustard);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   4. CUSTOM CURSOR
+   ========================================================================== */
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: none;
+  }
+
+  a, button, [role="button"] {
+    cursor: none;
+  }
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition: transform 0.08s ease-out;
+}
+
+.cursor__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--mustard);
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+
+.cursor--hover .cursor__dot {
+  width: 20px;
+  height: 20px;
+  background: var(--paprika);
+}
+
+.cursor__fork svg {
+  transform: translate(-50%, -50%);
+}
+
+/* ==========================================================================
+   5. PAGE LOADER
+   ========================================================================== */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--espresso);
+  transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+}
+
+.loader.is-hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+}
+
+.loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loader__apron-path {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: drawApron 2s ease forwards;
+}
+
+.loader__tie {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: drawTie 0.8s ease forwards 1.2s;
+}
+
+@keyframes drawApron {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes drawTie {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.loader__text {
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards 1.5s;
+}
+
+/* ==========================================================================
+   6. SOUND TOGGLE
+   ========================================================================== */
+.sound-toggle {
+  position: fixed;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) 0.75rem;
+  background: var(--smoke);
+  border: 1px solid rgba(212, 160, 23, 0.3);
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+  transition: background 0.3s ease;
+}
+
+.sound-toggle:hover {
+  background: rgba(26, 18, 11, 0.85);
+}
+
+.sound-toggle__label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mustard);
+}
+
+.sound-toggle__icon {
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   7. HEADER / NAV
+   ========================================================================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  transition: background 0.4s ease;
+}
+
+.site-header.is-scrolled {
+  background: var(--smoke);
+  backdrop-filter: blur(8px);
+}
+
+.site-header__logo {
+  display: flex;
+  align-items: center;
+}
+
+.site-header__name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+}
+
+.site-header__nav {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.site-header__nav a {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-variant: all-small-caps;
+  letter-spacing: 0.15em;
+  color: var(--cream);
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 0.3s ease;
+}
+
+.site-header__nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--mustard);
+  transition: width 0.3s ease;
+}
+
+.site-header__nav a:hover {
+  color: var(--mustard);
+}
+
+.site-header__nav a:hover::after,
+.site-header__nav a.is-active::after {
+  width: 100%;
+}
+
+.site-header__nav a.is-active {
+  color: var(--mustard);
+}
+
+/* ==========================================================================
+   8. SCENE — GENERIC
+   ========================================================================== */
+.scene {
+  position: relative;
+  width: 100%;
+}
+
+/* ==========================================================================
+   9. SCENE 1 — HERO
+   ========================================================================== */
+.scene--hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--espresso);
+  overflow: hidden;
+  position: relative;
+}
+
+.scene--hero__smoke {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.scene--hero__image-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.scene--hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.scene--hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: var(--space-md);
+  max-width: 60rem;
+}
+
+.scene--hero__headline {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--cream);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.02em;
+}
+
+.scene--hero__subtitle {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.5vw, 1.1rem);
+  color: var(--mustard);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-lg);
+  line-height: 1.8;
+}
+
+.scene--hero__subtitle em {
+  font-style: italic;
+  color: var(--cream);
+}
+
+/* CTA Button — Paper style */
+.btn--paper {
+  position: relative;
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: transparent;
+  border: 2px solid var(--mustard);
+  overflow: hidden;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+
+.btn--paper__text {
+  position: relative;
+  z-index: 2;
+}
+
+.btn--paper__fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  background: var(--mustard);
+  transition: width 0.3s ease, height 0.3s ease;
+  z-index: 1;
+}
+
+.btn--paper:hover {
+  color: var(--espresso);
+  background: var(--mustard);
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+
+.btn--paper:hover .btn--paper__fold {
+  width: 20px;
+  height: 20px;
+}
+
+/* Scroll indicator */
+.scene--hero__scroll-indicator {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  animation: bobFloat 3s ease-in-out infinite;
+}
+
+.sausage-svg {
+  animation: rotateSausage 6s linear infinite;
+}
+
+@keyframes rotateSausage {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bobFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-8px); }
+}
+
+.scene--hero__scroll-text {
+  font-family: var(--font-hand);
+  font-size: 0.9rem;
+  color: var(--cream);
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   10. SCENE 2 — SPEISEKARTE (Chalkboard)
+   ========================================================================== */
+.scene--karte {
+  background: var(--charcoal);
+  padding: var(--space-xl) var(--space-md);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chalkboard texture via gradient noise */
+.scene--karte::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.02) 0%, transparent 40%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,0.008) 2px,
+      rgba(255,255,255,0.008) 4px
+    );
+  pointer-events: none;
+}
+
+.scene--karte__paper {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  position: relative;
+  z-index: 2;
+}
+
+.scene--karte__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  color: var(--cream);
+  margin-bottom: var(--space-sm);
+}
+
+.scene--karte__intro {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+  color: rgba(245, 240, 232, 0.6);
+  letter-spacing: 0.05em;
+  max-width: 30rem;
+  margin: 0 auto;
+}
+
+.scene--karte__board {
+  max-width: 42rem;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Menu item row */
+.menu-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.08);
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.menu-item:hover {
+  background: rgba(245, 240, 232, 0.03);
+}
+
+.menu-item__name {
+  font-family: var(--font-hand);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--cream);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.menu-item__dots {
+  flex: 1;
+  border-bottom: 2px dotted rgba(245, 240, 232, 0.2);
+  min-width: 2rem;
+  margin-bottom: 0.4em;
+}
+
+.menu-item__price {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--mustard);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+/* Polaroid hover card */
+.menu-item__polaroid {
+  position: absolute;
+  top: -60%;
+  right: -220px;
+  width: 180px;
+  padding: 8px 8px 30px;
+  background: #fff;
+  box-shadow: var(--shadow-hard);
+  transform: rotate(2deg) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 10;
+}
+
+.menu-item__polaroid img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.menu-item__polaroid-label {
+  display: block;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 0.95rem;
+  color: var(--charcoal);
+  margin-top: 6px;
+}
+
+.menu-item:hover .menu-item__polaroid {
+  opacity: 1;
+  transform: rotate(2deg) scale(1);
+}
+
+/* Typewriter cursor */
+.typewriter .typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: var(--mustard);
+  margin-left: 4px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.scene--karte__note {
+  text-align: center;
+  margin-top: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: rgba(245, 240, 232, 0.35);
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   11. SCENE 3 — GALLERY (Horizontal Scroll / Film Strip)
+   ========================================================================== */
+.scene--galerie {
+  background: var(--cream);
+  padding-top: var(--space-xl);
+  position: relative;
+}
+
+.scene--galerie__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  color: var(--espresso);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.scene--galerie__pin-wrap {
+  overflow: hidden;
+  width: 100%;
+}
+
+.scene--galerie__track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  width: max-content;
+  position: relative;
+  background: var(--espresso);
+}
+
+/* Sprocket strips */
+.sprocket-strip {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.sprocket-strip--top {
+  top: 0;
+}
+
+.sprocket-strip--bottom {
+  bottom: 0;
+}
+
+.sprocket-holes {
+  width: 100%;
+  height: 30px;
+}
+
+/* Gallery panels */
+.gallery-panel {
+  flex-shrink: 0;
+  width: clamp(280px, 30vw, 450px);
+  height: clamp(200px, 25vw, 320px);
+  overflow: hidden;
+  position: relative;
+  margin: 40px 0;
+}
+
+.gallery-panel:nth-child(odd) {
+  height: clamp(220px, 28vw, 350px);
+}
+
+.gallery-panel:nth-child(3n) {
+  height: clamp(180px, 22vw, 280px);
+}
+
+.gallery-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, filter 0.6s ease;
+  filter: sepia(0);
+}
+
+.gallery-panel:hover img {
+  transform: scale(1.05);
+  filter: sepia(0.2);
+}
+
+/* Gallery handwritten notes */
+.gallery-note {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-sm);
+}
+
+.gallery-note span {
+  font-family: var(--font-hand);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: var(--mustard);
+  line-height: 1.4;
+  transform: rotate(-2deg);
+  white-space: nowrap;
+  animation: wobble 4s ease-in-out infinite;
+}
+
+.gallery-note:nth-child(4n) span {
+  transform: rotate(1.5deg);
+  animation-delay: -1s;
+}
+
+.gallery-note:nth-child(6n) span {
+  transform: rotate(-3deg);
+  animation-delay: -2s;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-2deg); }
+  25% { transform: rotate(-1deg); }
+  50% { transform: rotate(-2.5deg); }
+  75% { transform: rotate(-1.5deg); }
+}
+
+/* ==========================================================================
+   12. SCENE 4 — ABOUT US (Split Layout)
+   ========================================================================== */
+.scene--ueber {
+  background: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+
+.scene--ueber__split {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+}
+
+.scene--ueber__image-col {
+  position: relative;
+  min-height: 60vh;
+  overflow: hidden;
+}
+
+.scene--ueber__portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Polaroid on top of image */
+.scene--ueber__polaroid {
+  position: absolute;
+  bottom: var(--space-md);
+  right: var(--space-md);
+  width: 160px;
+  padding: 8px 8px 30px;
+  background: #fff;
+  box-shadow: var(--shadow-hard);
+  transform: rotate(-3deg);
+  z-index: 5;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.scene--ueber__polaroid:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: var(--shadow-lift);
+}
+
+.scene--ueber__polaroid-img {
+  width: 100%;
+  height: auto;
+}
+
+.scene--ueber__polaroid-year {
+  display: block;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  color: var(--charcoal);
+  margin-top: 4px;
+}
+
+/* Letter column */
+.scene--ueber__letter-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-md);
+  background:
+    linear-gradient(135deg, rgba(245,240,232,1) 0%, rgba(235,228,215,1) 100%);
+}
+
+.scene--ueber__letter {
+  max-width: 32rem;
+}
+
+.scene--ueber__salutation {
+  font-family: var(--font-hand);
+  font-size: 1.8rem;
+  color: var(--espresso);
+  margin-bottom: var(--space-sm);
+}
+
+.scene--ueber__letter p {
+  font-family: var(--font-hand);
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  line-height: 1.8;
+  color: var(--charcoal);
+  margin-bottom: var(--space-sm);
+}
+
+.scene--ueber__letter em {
+  font-style: italic;
+  color: var(--paprika);
+}
+
+/* SVG Signature — draw animation */
+.scene--ueber__signature {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.signature-path {
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  transition: stroke-dashoffset 2s ease;
+}
+
+.signature-path.is-drawn {
+  stroke-dashoffset: 0;
+}
+
+.scene--ueber__signer {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--charcoal);
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   13. SCENE 5 — HOURS & LOCATION
+   ========================================================================== */
+.scene--zeiten {
+  background: var(--cream);
+  padding: var(--space-xl) var(--space-md);
+}
+
+.scene--zeiten__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  color: var(--espresso);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.scene--zeiten__split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+/* Hours list — stamp style */
+.scene--zeiten__hours {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hours-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.85rem var(--space-sm);
+  border: 2px solid var(--espresso);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  position: relative;
+  background: var(--cream);
+  transition: transform 0.2s ease;
+}
+
+/* Slight rotation variations for stamp effect */
+.hours-row:nth-child(1) { transform: rotate(-1deg); }
+.hours-row:nth-child(2) { transform: rotate(0.5deg); }
+.hours-row:nth-child(3) { transform: rotate(-0.5deg); }
+.hours-row:nth-child(4) { transform: rotate(0.3deg); }
+.hours-row:nth-child(5) { transform: rotate(-0.8deg); }
+.hours-row:nth-child(6) { transform: rotate(0.6deg); }
+.hours-row:nth-child(7) { transform: rotate(-0.3deg); }
+
+.hours-row__day {
+  min-width: 8rem;
+  font-weight: 700;
+}
+
+.hours-row__time {
+  flex: 1;
+}
+
+.hours-row--closed {
+  opacity: 0.5;
+}
+
+.hours-row--closed .hours-row__time {
+  font-style: italic;
+}
+
+/* HEUTE stamp — hidden by default, JS shows the correct one */
+.hours-row__stamp {
+  display: none;
+}
+
+.hours-row.is-today .hours-row__stamp {
+  display: inline-block;
+}
+
+.stamp--heute {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--paprika);
+  border: 2px solid var(--paprika);
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transform: rotate(-4deg);
+  text-shadow:
+    0 0 4px rgba(192, 57, 43, 0.3),
+    0 0 8px rgba(192, 57, 43, 0.15);
+  animation: stampIn 0.4s ease-out;
+}
+
+@keyframes stampIn {
+  0% {
+    transform: rotate(-4deg) scale(1.4);
+    opacity: 0;
+  }
+  60% {
+    transform: rotate(-4deg) scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-4deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Location / Contact */
+.scene--zeiten__location {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.scene--zeiten__contact {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.scene--zeiten__phone {
+  margin-bottom: var(--space-sm);
+}
+
+.scene--zeiten__phone a {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--mustard);
+  transition: color 0.3s ease;
+}
+
+.scene--zeiten__phone a:hover {
+  color: var(--paprika);
+}
+
+/* SVG mini-map */
+.scene--zeiten__map {
+  max-width: 100%;
+  height: auto;
+  border: 2px solid var(--espresso);
+  background: rgba(245, 240, 232, 0.5);
+  box-shadow: var(--shadow-hard);
+}
+
+/* Map ping animation */
+.map-ping {
+  animation: ping 2s ease-out infinite;
+}
+
+@keyframes ping {
+  0% {
+    r: 12;
+    opacity: 0.6;
+  }
+  100% {
+    r: 28;
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   14. SCENE 6 — FOOTER
+   ========================================================================== */
+.scene--footer {
+  background:
+    linear-gradient(180deg, var(--cream) 0%, rgba(235, 228, 215, 1) 100%);
+  border-top: 2px solid rgba(26, 18, 11, 0.1);
+  padding: var(--space-xl) var(--space-md) var(--space-lg);
+  text-align: center;
+}
+
+.scene--footer__inner {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.scene--footer__goodbye {
+  font-family: var(--font-hand);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  color: var(--espresso);
+  margin-bottom: var(--space-md);
+  line-height: 1;
+}
+
+/* Bratwurst SVG */
+.scene--footer__wurst {
+  margin: var(--space-md) auto;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-wurst-svg {
+  transition: transform 0.6s ease;
+}
+
+.scene--footer__wurst:hover .footer-wurst-svg {
+  transform: rotate(360deg);
+}
+
+.scene--footer__meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--charcoal);
+  line-height: 1.8;
+  opacity: 0.7;
+}
+
+.scene--footer__meta address {
+  margin-bottom: var(--space-xs);
+}
+
+.scene--footer__meta a {
+  color: var(--charcoal);
+  transition: color 0.3s ease;
+}
+
+.scene--footer__meta a:hover {
+  color: var(--mustard);
+}
+
+.scene--footer__legal {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  margin-bottom: var(--space-xs);
+}
+
+.scene--footer__legal a {
+  text-decoration: none;
+  position: relative;
+}
+
+.scene--footer__legal a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--charcoal);
+  transition: width 0.3s ease;
+}
+
+.scene--footer__legal a:hover::after {
+  width: 100%;
+}
+
+.scene--footer__copy {
+  margin-top: var(--space-xs);
+  font-size: 0.65rem;
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   15. ANIMATION UTILITY CLASSES
+   ========================================================================== */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.fade-in.is-visible {
+  opacity: 1;
+}
+
+.slide-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.slide-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-left {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.slide-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-right {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.slide-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Smoke pulse for idle canvas */
+@keyframes smokePulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+.scene--hero__smoke--idle {
+  animation: smokePulse 5s ease-in-out infinite;
+}
+
+/* Sprocket scroll animation */
+@keyframes sprocketScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-80px); }
+}
+
+/* ==========================================================================
+   16. GREASE SPOT DECALS (Subtle pseudo-element textures)
+   ========================================================================== */
+.scene--karte::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 10%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(212, 160, 23, 0.04) 0%,
+    rgba(212, 160, 23, 0.02) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scene--zeiten::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 8%;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(139, 94, 60, 0.04) 0%,
+    rgba(139, 94, 60, 0.02) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   17. RESPONSIVE — MOBILE FIRST
+   ========================================================================== */
+
+/* --- Up to 768px (base mobile styles already set above) --- */
+
+@media (max-width: 767px) {
+  .site-header__nav {
+    gap: var(--space-sm);
+  }
+
+  .site-header__nav a {
+    font-size: 0.65rem;
+  }
+
+  /* Polaroid hover cards hidden on mobile (touch) */
+  .menu-item__polaroid {
+    display: none;
+  }
+
+  /* Gallery: vertical scroll */
+  .scene--galerie__track {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+  }
+
+  .gallery-panel {
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  .gallery-panel:nth-child(odd),
+  .gallery-panel:nth-child(3n) {
+    height: auto;
+  }
+
+  .gallery-panel img {
+    height: auto;
+    aspect-ratio: 3/2;
+  }
+
+  .gallery-note span {
+    animation: none;
+    transform: none;
+  }
+
+  .sprocket-strip {
+    display: none;
+  }
+
+  /* About: stack */
+  .scene--ueber__image-col {
+    min-height: 50vh;
+  }
+
+  .scene--ueber__polaroid {
+    width: 120px;
+    bottom: var(--space-sm);
+    right: var(--space-sm);
+  }
+
+  /* Hours: full width stamps */
+  .hours-row {
+    font-size: 0.75rem;
+    padding: 0.7rem var(--space-xs);
+  }
+
+  .hours-row__day {
+    min-width: 6rem;
+  }
+
+  /* Footer */
+  .scene--footer__goodbye {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+
+  /* Sound toggle compact */
+  .sound-toggle__label {
+    display: none;
+  }
+}
+
+/* --- 768px and up --- */
+@media (min-width: 768px) {
+  .scene--zeiten__split {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .scene--ueber__split {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .scene--ueber__image-col {
+    min-height: 100vh;
+  }
+}
+
+/* --- 1024px and up --- */
+@media (min-width: 1024px) {
+  .site-header {
+    padding: var(--space-sm) var(--space-lg);
+  }
+
+  .menu-item__polaroid {
+    right: -240px;
+    width: 200px;
+  }
+
+  .scene--ueber__letter-col {
+    padding: var(--space-xl);
+  }
+}
+
+/* --- 1440px and up --- */
+@media (min-width: 1440px) {
+  .scene--hero__content {
+    max-width: 72rem;
+  }
+
+  .scene--karte__board {
+    max-width: 48rem;
+  }
+
+  .scene--ueber__letter {
+    max-width: 36rem;
+  }
+
+  .gallery-panel {
+    width: 500px;
+  }
+}
+
+/* ==========================================================================
+   18. ACCESSIBILITY — REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .loader {
+    transition: none;
+  }
+
+  .signature-path {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+
+  .sausage-svg {
+    animation: none;
+  }
+
+  .scene--hero__scroll-indicator {
+    animation: none;
+  }
+
+  .gallery-note span {
+    animation: none;
+  }
+
+  .gallery-panel img {
+    transition: none;
+  }
+
+  .map-ping {
+    animation: none;
+  }
+
+  .footer-wurst-svg {
+    transition: none;
+  }
+
+  .stamp--heute {
+    animation: none;
+  }
+
+  .fade-in,
+  .slide-up,
+  .slide-left,
+  .slide-right {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   19. PRINT STYLES (Minimal)
+   ========================================================================== */
+@media print {
+  body::after,
+  .loader,
+  .cursor,
+  .sound-toggle,
+  .scene--hero__smoke,
+  .scene--hero__scroll-indicator,
+  .sprocket-strip {
+    display: none !important;
+  }
+
+  .scene--hero {
+    min-height: auto;
+    background: #fff;
+    color: #000;
+  }
+
+  .scene--hero__headline,
+  .scene--hero__subtitle {
+    color: #000;
+  }
+
+  .scene--karte {
+    background: #fff;
+    color: #000;
+  }
+
+  .menu-item__name,
+  .scene--karte__title {
+    color: #000;
+  }
+}
