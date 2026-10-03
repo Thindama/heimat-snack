@@ -28,7 +28,7 @@ for page in PAGES:
     html = open(os.path.join(ROOT, page), encoding='utf-8').read()
     html = html.replace('<link rel="stylesheet" href="css/regenschild.css">', '<style>\n' + css + '\n</style>')
     html = html.replace('<script src="js/regenschild.js"></script>', '<script>\n' + js + '\n</script>')
-    used_images.update(re.findall(r'img/([\w.-]+\.webp)', html))
+    used_images.update(re.findall(r'img/((?:logo/)?[\w.-]+\.(?:webp|png))', html))
     if page == 'index.html':
         title = re.search(r'<title>(.*?)</title>', html, re.S).group(1)
         desc = re.search(r'<meta name="description" content="([^"]*)">', html).group(1)
@@ -40,5 +40,6 @@ for page in PAGES:
     print('%-16s %6d KB' % (page, len(html.encode('utf-8')) // 1024))
 
 for name in sorted(used_images):
+    os.makedirs(os.path.dirname(os.path.join(OUT, 'img', name)), exist_ok=True)
     shutil.copy(os.path.join(ROOT, 'img', name), os.path.join(OUT, 'img', name))
 print('%d Bilder kopiert nach %s' % (len(used_images), OUT))

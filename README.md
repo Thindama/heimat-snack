@@ -10,10 +10,22 @@ Website für Regenschild: Schutz vor Starkregen, Sturm und Hagel in Hegau, am Bo
 | `starkregen.html` | Säule 1: Kennzahlen, Prüfen / Schützen / Im Notfall, weitere Säulen |
 | `sturm.html` | Säule 2: Kennzahlen, Prüfen / Schützen / Im Notfall, weitere Säulen |
 | `hagel.html` | Säule 3: Kennzahlen, Prüfen / Schützen / Im Notfall, weitere Säulen |
-| `css/regenschild.css` | Stylesheet (Inter/Roboto, Petrol `#09716d`, Akzent Regenblau `#3cc3d6`, dunkle Bänder, Karten, Scroll-Reveal, mobile Navigation) |
-| `js/regenschild.js` | Mobile Navigation, Faktenband, Scroll-Reveal, Zähler, Schnellcheck, FAQ-Akkordeon, Anfrage-Text, WhatsApp-Link, Unternavigation der Säulen |
+| `css/regenschild.css` | Stylesheet (Inter/Roboto, Farben aus dem Logo: Sturmblau `#1f4f7a`, Sturm-Navy `#081927`, Regenblau `#7fc0ec`; Karten, mobile Navigation, Animationen) |
+| `js/regenschild.js` | Mobile Navigation, Animationen, Zähler, Schnellcheck, FAQ-Akkordeon, Anfrage-Text, WhatsApp-Link, Unternavigation der Säulen |
 | `img/` | Fotos (Pexels-Lizenz, kommerziell nutzbar, keine Namensnennung nötig) |
+| `img/logo/` | Freigestelltes Logo: Header, Footer mit Claim, weiße Version für dunkle Flächen, Symbol, Favicon |
+| `tools/make-logo.py` | Erzeugt die Logo-Varianten aus der Original-Datei neu |
 | `tools/build-artifact.py` | Baut eine Version mit eingebettetem CSS/JS für die Veröffentlichung |
+
+## Animationen
+
+- Hero: Regen, schräger Sturmregen oder Hagel je nach Seite, gelegentliches Wetterleuchten, Parallax-Hintergrund, gestaffelter Einstieg
+- Überschriften bauen sich Wort für Wort auf, Akzentwörter mit Lichtglanz
+- Karten gleiten, kippen oder zoomen gestaffelt herein, Lichtschein folgt der Maus
+- Bilder öffnen sich mit Wisch-Effekt und Zoom, ausgewählte Bilder mit Parallax
+- Icons zeichnen sich Strich für Strich, die Ablauf-Linie wächst mit
+- Header schrumpft beim Scrollen, Fortschrittsbalken oben, Glanz auf Buttons
+- Bei der Systemeinstellung „Bewegung reduzieren“ ist alles abgeschaltet
 
 ## Vor dem Livegang ausfüllen
 
