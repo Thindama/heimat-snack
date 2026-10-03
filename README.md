@@ -6,12 +6,12 @@ Website für Regenschild: Schutz vor Starkregen, Sturm und Hagel in Hegau, am Bo
 
 | Datei | Inhalt |
 |---|---|
-| `index.html` | Startseite: Hero mit Regen-Animation, Faktenband, Risiko-Schnellcheck, drei Säulen, Ablauf, Leistungen, Warum Regenschild, Ansprechpartner, Zielgruppen-Tabs, FAQ, Anfrage-Formular |
-| `starkregen.html` | Säule 1: Prüfen / Schützen / Im Notfall |
-| `sturm.html` | Säule 2: Prüfen / Schützen / Im Notfall |
-| `hagel.html` | Säule 3: Prüfen / Schützen / Im Notfall |
-| `css/regenschild.css` | Design-System (Farben, Typografie, Layout, Animationen, Dark Mode) |
-| `js/regenschild.js` | Regen/Hagel-Canvas, Wetterleuchten, Scroll-Reveal, Zähler, Schnellcheck, Tabs, FAQ, Anfrage-Text, WhatsApp-Link |
+| `index.html` | Startseite: Hero, Faktenband, 4 Kernvorteile, Ansprechpartner, drei Säulen, Leistungen, Pakete, Ablauf in 4 Schritten, Vergleich, Risiko-Schnellcheck, Zielgruppen, Unwetter-Wissen, FAQ, Anfrage-Formular |
+| `starkregen.html` | Säule 1: Kennzahlen, Prüfen / Schützen / Im Notfall, weitere Säulen |
+| `sturm.html` | Säule 2: Kennzahlen, Prüfen / Schützen / Im Notfall, weitere Säulen |
+| `hagel.html` | Säule 3: Kennzahlen, Prüfen / Schützen / Im Notfall, weitere Säulen |
+| `css/regenschild.css` | Stylesheet (Inter/Roboto, Petrol `#09716d`, Akzent Regenblau `#3cc3d6`, dunkle Bänder, Karten, Scroll-Reveal, mobile Navigation) |
+| `js/regenschild.js` | Mobile Navigation, Faktenband, Scroll-Reveal, Zähler, Schnellcheck, FAQ-Akkordeon, Anfrage-Text, WhatsApp-Link, Unternavigation der Säulen |
 | `img/` | Fotos (Pexels-Lizenz, kommerziell nutzbar, keine Namensnennung nötig) |
 | `tools/build-artifact.py` | Baut eine Version mit eingebettetem CSS/JS für die Veröffentlichung |
 
@@ -20,7 +20,7 @@ Website für Regenschild: Schutz vor Starkregen, Sturm und Hagel in Hegau, am Bo
 Platzhalter sind gelb gestrichelt markiert (Klasse `ph`) und stehen in allen vier Seiten:
 
 - `[Telefon]`, `[WhatsApp]`, `[E-Mail]`, `[Adresse]`
-- `[Preis]` für den Vor-Ort-Check (FAQ auf der Startseite)
+- `[Preis]` für Vor-Ort-Check und Wartungsabo (Pakete und FAQ auf der Startseite)
 - `[Impressum]`, `[Datenschutz]` im Footer (Links auf eigene Seiten setzen)
 - WhatsApp-Button: in `js/regenschild.js` die Nummer bei `KONTAKT.whatsapp` eintragen (international, ohne `+`), dann wird der Button „Per WhatsApp senden“ aktiv.
 
