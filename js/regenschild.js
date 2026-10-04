@@ -178,7 +178,7 @@
   var kind = page.indexOf('hagel') === 0 ? 'hail' : page.indexOf('sturm') === 0 ? 'storm' : 'rain';
   var wxLayers = [];
   if (motion) {
-    each('.hero, .cta-banner', function (sec) {
+    each('.hero, .cta-banner, .wiz', function (sec) {
       var wx = document.createElement('div'); wx.className = 'wx wx--' + kind; wx.setAttribute('aria-hidden', 'true');
       [260, 180].forEach(function (sz) { var i = document.createElement('i'); i.style.setProperty('--img', weatherTile(kind, sz)); wx.appendChild(i); });
       sec.insertBefore(wx, sec.firstChild);
@@ -277,37 +277,229 @@
     });
   });
 
-  /* ---------- Schnellcheck ---------- */
-  var checkForm = $('checkForm');
-  var lastCheck = { r: 0, s: 0, h: 0, recs: [] };
+  /* ---------- KI-Check als Schrittfolge ---------- */
+  var wiz = $('wiz');
+  var lastCheck = { r: 0, s: 0, h: 0, recs: [], place: '', weather: null, obj: '' };
   var kontakt = $('kontakt');
   function level(n) { return n === 0 ? ['offen', 0] : n <= 2 ? ['niedrig', 1] : n <= 5 ? ['mittel', 2] : ['hoch', 3]; }
-  if (checkForm) {
-    var inputs = Array.prototype.slice.call(checkForm.querySelectorAll('input[type="checkbox"]'));
-    var recList = $('recList'), hint = $('resultHint');
-    var bars = { r: 'bar-r', s: 'bar-s', h: 'bar-h' }, lvls = { r: 'lvl-r', s: 'lvl-s', h: 'lvl-h' };
-    function updateCheck() {
-      var sc = { r: 0, s: 0, h: 0 }, recs = [];
-      inputs.forEach(function (i) {
-        if (!i.checked) return;
+  var SYSNAME = { dichtschott: 'Dichtschotts', rueckstau: 'Rückstausicherung', kellerluken: 'Druckwasserdichte Luken', dammbalken: 'Dammbalken', flutwand: 'Mobile Flutwände', klappschott: 'Klappschott', sturmklammern: 'Sturmklammern', windwaechter: 'Windwächter', hagelschutz: 'Hagelfeste Bauteile', sonderbauten: 'Sonderbauten nach Maß', hochwassertueren: 'Hochwassertüren', zubehoer: 'Wassermelder und Alarm' };
+  function fmtDate(iso) { if (!iso) return ''; var p = iso.split('-'); return p[2] + '.' + p[1] + '.' + p[0]; }
+
+  if (wiz) {
+    var steps = all('#wiz .wiz-step');
+    var order = steps.map(function (st) { return st.getAttribute('data-step'); });
+    var qSteps = ['addr', 'obj', 'keller', 'dach', 'technik', 'past', 'scan'];
+    var idx = 0;
+    var wnav = $('wizNav'), wnext = $('wizNext'), whint = $('wizHint'), wback = $('wizBack'), wprog = $('wizProg'), wlabel = $('wizStep');
+    var addrIn = $('w-addr'), addrList = $('w-addrList'), addrFound = $('w-addrFound');
+    var geo = null, weather = null, debounce = null;
+
+    function show(i, backwards) {
+      steps.forEach(function (st, k) { st.classList.toggle('is-active', k === i); st.classList.toggle('is-back', k === i && !!backwards); });
+      idx = i;
+      var name = order[i], qi = qSteps.indexOf(name);
+      wprog.style.width = name === 'start' ? '0%' : name === 'result' ? '100%' : ((qi + 1) / 7 * 100) + '%';
+      wlabel.textContent = name === 'start' ? 'Start' : name === 'result' ? 'Ergebnis' : 'Schritt ' + (qi + 1) + ' von 7';
+      wback.hidden = name === 'start' || name === 'scan' || name === 'result';
+      wnav.hidden = name === 'start' || name === 'scan' || name === 'result';
+      validate();
+      if (name !== 'start') { var r = wiz.getBoundingClientRect(); if (r.top < 0 || r.top > window.innerHeight * 0.5) wiz.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
+      if (name === 'addr') setTimeout(function () { addrIn.focus(); }, 450);
+      if (name === 'scan') runScan();
+    }
+    function validate() {
+      var name = order[idx], ok = true;
+      if (name === 'obj') ok = !!wiz.querySelector('input[name="w-obj"]:checked');
+      else if (['keller', 'dach', 'technik', 'past'].indexOf(name) >= 0) ok = !!steps[idx].querySelector('input:checked');
+      wnext.disabled = !ok;
+      whint.textContent = ok ? '' : (name === 'obj' ? 'Bitte eine Option wählen.' : 'Bitte mindestens eine Option wählen – oder „Nichts davon“.');
+      if (name === 'addr') {
+        wnext.textContent = geo ? 'Weiter' : (addrIn.value.trim() ? 'Adresse prüfen und weiter' : 'Weiter');
+        whint.textContent = geo ? '' : 'Ohne Adresse rechnen wir ohne Wetterdaten.';
+      } else { wnext.textContent = name === 'past' ? 'Analyse starten' : 'Weiter'; }
+    }
+    function go(d) { var i = idx + d; if (i < 0 || i >= steps.length) return; show(i, d < 0); }
+
+    wiz.addEventListener('change', function (e) {
+      var inp = e.target;
+      if (inp.type === 'checkbox') {
+        var box = inp.closest('.choices');
+        if (inp.getAttribute('data-none') && inp.checked) { Array.prototype.forEach.call(box.querySelectorAll('input:not([data-none])'), function (o) { o.checked = false; }); }
+        else if (!inp.getAttribute('data-none') && inp.checked) { var n = box.querySelector('input[data-none]'); if (n) n.checked = false; }
+      }
+      validate();
+      if (inp.type === 'radio' && order[idx] === 'obj') setTimeout(function () { if (order[idx] === 'obj') go(1); }, 380);
+    });
+    $('wizStart').addEventListener('click', function () { go(1); });
+    wback.addEventListener('click', function () { go(-1); });
+    wnext.addEventListener('click', function () {
+      if (order[idx] === 'addr' && !geo && addrIn.value.trim()) { geocode(addrIn.value.trim(), true); return; }
+      go(1);
+    });
+    $('wizRestart').addEventListener('click', function () {
+      Array.prototype.forEach.call(wiz.querySelectorAll('input'), function (i) { if (i.type === 'text') i.value = ''; else i.checked = false; });
+      geo = null; weather = null; addrFound.hidden = true; addrList.hidden = true;
+      show(0, true);
+    });
+    wiz.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && e.target === addrIn) { e.preventDefault(); geocode(addrIn.value.trim(), false); }
+      else if (e.key === 'Enter' && !wnav.hidden && !wnext.disabled && e.target.tagName !== 'BUTTON') { e.preventDefault(); wnext.click(); }
+    });
+
+    /* Adresse: Photon (OpenStreetMap-Daten), Ersatz Nominatim */
+    function mapPhoton(j) {
+      return (j.features || []).map(function (f) {
+        var p = f.properties, street = (p.street || p.name || '') + (p.housenumber ? ' ' + p.housenumber : '');
+        var city = p.city || p.town || p.village || p.county || '';
+        return { name: [street, [p.postcode, city].filter(Boolean).join(' ')].filter(Boolean).join(', '), city: city, lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] };
+      });
+    }
+    function photon(q, limit) {
+      return fetch('https://photon.komoot.io/api/?q=' + encodeURIComponent(q) + '&limit=' + limit + '&lang=de&bbox=5.5,45.5,17.5,55.5').then(function (r) { return r.json(); }).then(mapPhoton);
+    }
+    function nominatim(q, limit) {
+      return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&accept-language=de&limit=' + limit + '&q=' + encodeURIComponent(q)).then(function (r) { return r.json(); })
+        .then(function (j) { return j.map(function (r) { return { name: r.display_name.split(',').slice(0, 3).join(','), city: '', lat: +r.lat, lon: +r.lon }; }); });
+    }
+    function lookup(q, limit) { return photon(q, limit).then(function (res) { return res.length ? res : nominatim(q, limit); }).catch(function () { return nominatim(q, limit); }); }
+    function pick(r) {
+      geo = r; addrIn.value = r.name; addrList.hidden = true; addrFound.hidden = false;
+      $('w-addrName').textContent = r.name;
+      $('w-addrMeta').textContent = 'Wetterdaten und Höhenlage werden für diesen Punkt geladen (' + r.lat.toFixed(4) + ', ' + r.lon.toFixed(4) + ').';
+      validate();
+    }
+    function suggest(q) {
+      lookup(q, 5).then(function (res) {
+        addrList.innerHTML = '';
+        res.forEach(function (r) { var li = document.createElement('li'); li.textContent = r.name; li.addEventListener('click', function () { pick(r); }); addrList.appendChild(li); });
+        addrList.hidden = !res.length;
+      }).catch(function () { addrList.hidden = true; });
+    }
+    function geocode(q, advance) {
+      if (!q) { go(1); return; }
+      wnext.disabled = true; whint.textContent = 'Adresse wird gesucht …';
+      lookup(q, 1).then(function (res) {
+        if (res.length) { pick(res[0]); if (advance) go(1); }
+        else { whint.textContent = 'Adresse nicht gefunden. Bitte Ort ergänzen oder ohne Adresse weiter.'; wnext.disabled = false; }
+      }).catch(function () { whint.textContent = 'Adresssuche gerade nicht erreichbar. Sie können ohne Adresse weitermachen.'; wnext.disabled = false; });
+    }
+    addrIn.addEventListener('input', function () {
+      geo = null; addrFound.hidden = true; validate(); clearTimeout(debounce);
+      var q = addrIn.value.trim();
+      if (q.length < 4) { addrList.hidden = true; return; }
+      debounce = setTimeout(function () { suggest(q); }, 350);
+    });
+    $('w-addrBtn').addEventListener('click', function () { geocode(addrIn.value.trim(), false); });
+    $('w-addrSkip').addEventListener('click', function () { geo = null; addrFound.hidden = true; go(1); });
+    document.addEventListener('click', function (e) { if (!addrList.contains(e.target) && e.target !== addrIn) addrList.hidden = true; });
+
+    /* Wetterarchiv und Höhenmodell (Open-Meteo) */
+    function fetchWeather(g) {
+      var end = new Date(); end.setDate(end.getDate() - 7);
+      var start = new Date(end); start.setFullYear(start.getFullYear() - 10);
+      function fmt(d) { return d.toISOString().slice(0, 10); }
+      var wx = fetch('https://archive-api.open-meteo.com/v1/archive?latitude=' + g.lat + '&longitude=' + g.lon + '&start_date=' + fmt(start) + '&end_date=' + fmt(end) + '&daily=precipitation_sum,wind_gusts_10m_max&timezone=Europe%2FBerlin').then(function (r) { return r.json(); });
+      var d = 0.0025, lats = [], lons = [];
+      [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]].forEach(function (o) { lats.push((g.lat + o[0] * d).toFixed(5)); lons.push((g.lon + o[1] * d * 1.5).toFixed(5)); });
+      var el = fetch('https://api.open-meteo.com/v1/elevation?latitude=' + lats.join(',') + '&longitude=' + lons.join(',')).then(function (r) { return r.json(); }).catch(function () { return null; });
+      return Promise.all([wx, el]).then(function (res) { return analyze(res[0], res[1]); });
+    }
+    function analyze(wx, el) {
+      var t = wx.daily.time, pr = wx.daily.precipitation_sum, gu = wx.daily.wind_gusts_10m_max;
+      var out = { rainDays30: 0, rainDays50: 0, stormDays75: 0, stormDays100: 0, thunder: 0, topRain: [], topGust: [], years: 10 };
+      var rain = [], gust = [];
+      for (var i = 0; i < t.length; i++) {
+        if (pr[i] != null) {
+          if (pr[i] >= 30) out.rainDays30++;
+          if (pr[i] >= 50) out.rainDays50++;
+          var m = +t[i].slice(5, 7); if (m >= 5 && m <= 9 && pr[i] >= 25) out.thunder++;
+          rain.push([pr[i], t[i]]);
+        }
+        if (gu[i] != null) { if (gu[i] >= 75) out.stormDays75++; if (gu[i] >= 100) out.stormDays100++; gust.push([gu[i], t[i]]); }
+      }
+      rain.sort(function (a, b) { return b[0] - a[0]; }); gust.sort(function (a, b) { return b[0] - a[0]; });
+      out.topRain = rain.slice(0, 3); out.topGust = gust.slice(0, 3);
+      out.maxRain = rain.length ? rain[0][0] : 0; out.maxRainDate = rain.length ? rain[0][1] : '';
+      out.maxGust = gust.length ? gust[0][0] : 0; out.maxGustDate = gust.length ? gust[0][1] : '';
+      out.years = Math.max(1, Math.round((new Date(t[t.length - 1]) - new Date(t[0])) / 31557600000));
+      if (el && el.elevation && el.elevation.length > 4) {
+        var e = el.elevation, here = e[0], around = e.slice(1).filter(function (v) { return v != null; });
+        var avg = around.reduce(function (a, b) { return a + b; }, 0) / around.length;
+        out.elev = here; out.elevDiff = here - avg; out.relief = Math.max.apply(null, around) - Math.min.apply(null, around);
+        out.terrain = out.elevDiff <= -3 ? 'Senke' : out.elevDiff >= 3 ? 'erhöht' : (out.relief >= 15 ? 'Hanglage' : 'eben');
+      }
+      return out;
+    }
+
+    function runScan() {
+      var lines = all('#scanLines li');
+      lines.forEach(function (l) { l.classList.remove('is-on', 'is-done'); });
+      var i = 0;
+      var timer = setInterval(function () {
+        if (i > 0) lines[i - 1].classList.add('is-done');
+        if (i < lines.length) { lines[i].classList.add('is-on'); i++; } else clearInterval(timer);
+      }, 750);
+      var p = geo ? fetchWeather(geo).catch(function () { return null; }) : Promise.resolve(null);
+      Promise.all([p, new Promise(function (r) { setTimeout(r, reduce ? 800 : 4300); })]).then(function (res) {
+        weather = res[0]; clearInterval(timer);
+        lines.forEach(function (l) { l.classList.add('is-on', 'is-done'); });
+        setTimeout(function () { renderResult(); show(order.indexOf('result')); }, 450);
+      });
+    }
+
+    function renderResult() {
+      var sc = { r: 0, s: 0, h: 0 }, recs = [], sysIds = [];
+      Array.prototype.forEach.call(wiz.querySelectorAll('.choices input[type="checkbox"]:checked:not([data-none])'), function (i) {
         var r = +i.getAttribute('data-r') || 0, s = +i.getAttribute('data-s') || 0, h = +i.getAttribute('data-h') || 0;
         sc.r += r; sc.s += s; sc.h += h;
-        recs.push({ t: i.getAttribute('data-tip'), w: r + s + h });
+        if (i.getAttribute('data-tip')) recs.push({ t: i.getAttribute('data-tip'), w: r + s + h });
+        if (i.getAttribute('data-sys')) sysIds = sysIds.concat(i.getAttribute('data-sys').split(','));
       });
+      var objEl = wiz.querySelector('input[name="w-obj"]:checked'), obj = objEl ? objEl.value : '';
+      if (obj === 'Mehrfamilienhaus' || obj === 'Gewerbe' || obj === 'Öffentliches Gebäude') recs.push({ t: 'Schutzkonzept mit Einsatzplan: Wer löst im Ernstfall was aus?', w: 4 });
+      if (obj === 'Denkmalgeschütztes Gebäude') { recs.push({ t: 'Unauffällige Systeme, vorab mit der Denkmalbehörde abgestimmt', w: 5 }); sysIds.push('sonderbauten'); }
+      if (obj === 'Immobilienkauf') recs.push({ t: 'Unwetter-Check vor dem Kauf als Grundlage für die Preisverhandlung', w: 5 });
+      var facts = [], w = weather, placeTxt = geo ? geo.name : 'ohne Standort';
+      if (w) {
+        if (w.rainDays30 >= 12) sc.r += 2; else if (w.rainDays30 >= 6) sc.r += 1;
+        if (w.rainDays50 >= 2) sc.r += 1;
+        if (w.terrain === 'Senke') { sc.r += 2; recs.unshift({ t: 'Ihr Grundstück liegt tiefer als die Umgebung: Zulauf von Oberflächenwasser und Schutzlinie prüfen', w: 9 }); sysIds.push('dammbalken', 'flutwand'); }
+        if (w.terrain === 'Hanglage') { sc.r += 1; recs.push({ t: 'Hanglage: Hangwasser, Entwässerung und Rückstau prüfen', w: 6 }); }
+        if (w.stormDays75 >= 25) sc.s += 2; else if (w.stormDays75 >= 10) sc.s += 1;
+        if (w.stormDays100 >= 2) sc.s += 1;
+        if (w.thunder >= 15) sc.h += 2; else if (w.thunder >= 7) sc.h += 1;
+        facts.push({ v: Math.round(w.maxRain) + ' mm', l: 'stärkster Regentag, ' + fmtDate(w.maxRainDate), c: w.maxRain >= 50 ? 'is-hot' : w.maxRain >= 30 ? 'is-warn' : '' });
+        facts.push({ v: w.rainDays30, l: 'Tage mit über 30 mm Regen in ' + w.years + ' Jahren', c: w.rainDays30 >= 12 ? 'is-hot' : w.rainDays30 >= 6 ? 'is-warn' : '' });
+        facts.push({ v: Math.round(w.maxGust) + ' km/h', l: 'stärkste Sturmböe, ' + fmtDate(w.maxGustDate), c: w.maxGust >= 100 ? 'is-hot' : w.maxGust >= 75 ? 'is-warn' : '' });
+        facts.push({ v: w.stormDays75, l: 'Tage mit Sturmböen über 75 km/h', c: w.stormDays75 >= 25 ? 'is-hot' : w.stormDays75 >= 10 ? 'is-warn' : '' });
+        facts.push({ v: w.thunder, l: 'Sommertage mit über 25 mm Regen (Gewitter- und Hagelhinweis)', c: w.thunder >= 15 ? 'is-hot' : w.thunder >= 7 ? 'is-warn' : '' });
+        if (w.terrain) {
+          var tv = w.terrain === 'Senke' ? Math.abs(w.elevDiff).toFixed(1).replace('.', ',') + ' m tiefer' : w.terrain === 'erhöht' ? w.elevDiff.toFixed(1).replace('.', ',') + ' m höher' : w.terrain;
+          facts.push({ v: tv, l: 'als die Umgebung · ' + Math.round(w.elev) + ' m ü. M.', c: w.terrain === 'Senke' ? 'is-hot' : w.terrain === 'Hanglage' ? 'is-warn' : '' });
+        }
+      }
       ['r', 's', 'h'].forEach(function (k) {
-        var lv = level(sc[k]);
-        $(bars[k]).style.width = (Math.min(sc[k] / 8, 1) * 100) + '%';
-        var le = $(lvls[k]); le.textContent = lv[0]; le.className = 'lvl lvl--' + lv[1];
+        var lv = level(sc[k]), bar = $('bar-' + k), le = $('lvl-' + k);
+        bar.style.width = '0'; le.textContent = lv[0]; le.className = 'lvl lvl--' + lv[1];
+        setTimeout(function () { bar.style.width = (Math.min(sc[k] / 9, 1) * 100) + '%'; }, 120);
       });
+      $('resPlace').textContent = placeTxt;
+      $('resultHint').textContent = w ? 'Je länger der Balken, desto dringender die Säule. Wetterdaten für ' + (geo.city || 'Ihren Standort') + ', ' + w.years + ' Jahre.' : (geo ? 'Wetterdaten konnten nicht geladen werden. Das Ergebnis beruht auf Ihren Angaben.' : 'Ohne Adresse beruht das Ergebnis nur auf Ihren Angaben.');
+      $('wfacts').innerHTML = facts.map(function (f) { return '<div class="wfact ' + f.c + '"><b>' + f.v + '</b><span>' + esc(f.l) + '</span></div>'; }).join('');
+      var ev = $('events');
+      if (w && (w.topRain.length || w.topGust.length)) {
+        ev.innerHTML = '<h4>Vergangene Ereignisse an diesem Standort</h4><ul>' +
+          w.topRain.map(function (e) { return '<li><b>' + fmtDate(e[1]) + '</b><span>' + Math.round(e[0]) + ' mm Regen an einem Tag</span></li>'; }).join('') +
+          w.topGust.map(function (e) { return '<li><b>' + fmtDate(e[1]) + '</b><span>Sturmböen bis ' + Math.round(e[0]) + ' km/h</span></li>'; }).join('') + '</ul>';
+      } else ev.innerHTML = '';
       recs.sort(function (a, b) { return b.w - a.w; });
-      recList.innerHTML = recs.length ? recs.slice(0, 6).map(function (r) { return '<li>' + esc(r.t) + '</li>'; }).join('') : '<li class="empty">Ihre Empfehlungen erscheinen hier.</li>';
-      hint.textContent = (sc.r + sc.s + sc.h) > 0
-        ? 'Je länger der Balken, desto dringender die Säule. Das ist eine Ersteinschätzung – der Vor-Ort-Check entscheidet.'
-        : 'Noch nichts angekreuzt. Jede Auswahl verändert die Balken sofort.';
-      lastCheck = { r: sc.r, s: sc.s, h: sc.h, recs: recs };
+      var seen = {}; recs = recs.filter(function (r) { if (seen[r.t]) return false; seen[r.t] = true; return true; });
+      $('recList').innerHTML = recs.length ? recs.slice(0, 6).map(function (r) { return '<li>' + esc(r.t) + '</li>'; }).join('') : '<li>Keine besonderen Schwachstellen angegeben. Ein Erstcheck mit Fotos lohnt sich trotzdem.</li>';
+      var uniq = []; sysIds.forEach(function (id) { if (SYSNAME[id] && uniq.indexOf(id) < 0) uniq.push(id); });
+      $('resSys').innerHTML = uniq.length ? 'Passende Systeme: ' + uniq.slice(0, 5).map(function (id) { return '<a href="systeme.html#' + id + '">' + SYSNAME[id] + '</a>'; }).join(' · ') : '';
+      lastCheck = { r: sc.r, s: sc.s, h: sc.h, recs: recs, place: placeTxt, weather: w, obj: obj };
     }
-    inputs.forEach(function (i) { i.addEventListener('change', updateCheck); });
-    updateCheck();
+
     var toInq = $('toInquiry');
     if (toInq) toInq.addEventListener('click', function () {
       var msg = $('f-msg');
@@ -317,13 +509,17 @@
           if (lastCheck[p[0]] > 0) parts.push(p[1] + ': ' + level(lastCheck[p[0]])[0] + ' (' + lastCheck[p[0]] + ' Punkte)');
           var chip = $(p[2]); if (chip && lastCheck[p[0]] >= 3) chip.checked = true;
         });
-        if (parts.length) {
-          var txt = 'Schnellcheck: ' + parts.join(', ') + '.\nZuerst prüfen: ' + lastCheck.recs.slice(0, 6).map(function (r) { return r.t; }).join('; ') + '.';
-          msg.value = (msg.value ? msg.value + '\n\n' : '') + txt;
-        }
+        var txt = 'KI-Check' + (lastCheck.obj ? ' (' + lastCheck.obj + ')' : '') + ': ' + (parts.length ? parts.join(', ') : 'keine Angaben') + '.';
+        if (lastCheck.place && lastCheck.place !== 'ohne Standort') txt += '\nStandort: ' + lastCheck.place;
+        var w = lastCheck.weather;
+        if (w) txt += '\nWetter (' + w.years + ' Jahre): max. ' + Math.round(w.maxRain) + ' mm/Tag, ' + w.rainDays30 + ' Tage über 30 mm, max. Böe ' + Math.round(w.maxGust) + ' km/h' + (w.terrain ? ', Lage: ' + w.terrain : '') + '.';
+        if (lastCheck.recs.length) txt += '\nZuerst prüfen: ' + lastCheck.recs.slice(0, 6).map(function (r) { return r.t; }).join('; ') + '.';
+        msg.value = (msg.value ? msg.value + '\n\n' : '') + txt;
+        var ort = $('f-ort'); if (ort && !ort.value && lastCheck.place && lastCheck.place !== 'ohne Standort') ort.value = lastCheck.place;
       }
       if (kontakt) kontakt.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
     });
+    show(0);
   }
 
   /* ---------- Anfrage vorbereiten ---------- */

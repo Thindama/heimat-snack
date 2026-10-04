@@ -16,7 +16,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'dist')
-PAGES = ['index.html', 'starkregen.html', 'sturm.html', 'hagel.html']
+PAGES = ['index.html', 'starkregen.html', 'sturm.html', 'hagel.html', 'systeme.html', 'anwendungsgebiete.html', 'denkmalschutz.html', 'ueber-uns.html']
 
 css = open(os.path.join(ROOT, 'css', 'regenschild.css'), encoding='utf-8').read()
 js = open(os.path.join(ROOT, 'js', 'regenschild.js'), encoding='utf-8').read()
