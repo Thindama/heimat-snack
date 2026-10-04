@@ -1688,3 +1688,36 @@ h2 { font-size: 46px; line-height: 1.08; }
   .founder .col-media { display: none; }
   .hero-v2 .trust-row { display: none; }
 }
+
+/* ==========================================================================
+   Ruhe: weniger gleichzeitige Bewegung
+   ========================================================================== */
+.wx i:nth-child(1) { opacity: .3; }
+.wx i:nth-child(2) { opacity: .18; }
+.wx-flash { animation-duration: 19s; }
+.motion .aurora { animation: none; }
+.aurora { opacity: .6; }
+.radar { display: none; }
+.motion .chip-float, .motion .chip-float.b { animation: none; }
+.hero-v2 .hero-kicker i { animation: none; }
+.motion .hero-title .accent { animation: none; }
+.motion .hero-title.split-in .accent .sw > span { animation: accent-shine 2.2s ease calc(1s + var(--wi, 0) * 60ms) 1 both; }
+.motion .price-card.featured { animation: none; box-shadow: 0 0 0 1px rgba(127, 192, 236, 0.3), 0 30px 80px rgba(8, 25, 39, 0.45); }
+.benefit:hover .icon-box, .step:hover .icon-box { transform: translateY(-4px); }
+.motion .service-card.in:hover, .motion .post-card.in:hover, .motion .result-card.in:hover { transform: translateY(-4px); }
+.scroll-cue { opacity: .6; }
+.reveal.tilt { transform: translateY(40px); }
+.wiz .wx { opacity: .4; }
+
+/* Stapelkarten, sauber: jede Karte gleitet komplett über die vorherige */
+@media (max-width: 1024px) {
+  .stack { display: block; }
+  .stack > * { position: sticky; top: calc(var(--stack-top, 86px) + var(--i, 0) * 12px); margin: 0 0 18px; transform-origin: 50% 0; box-shadow: 0 -8px 30px rgba(8, 25, 39, 0.10), 0 12px 40px rgba(8, 25, 39, 0.08); }
+  .stack > *:last-child { margin-bottom: 0; }
+  .steps-grid.stack > .step { background: #fff; border-radius: var(--radius-xl); padding: 30px 22px; border: 1px solid rgba(14, 32, 51, 0.06); }
+  .steps-grid.stack::before { display: none; }
+  .results-grid.stack > .result-card { background: #fff; }
+  .moment-grid.stack > .moment { background: var(--c-dark); }
+  .proof-numbers.stack > .pnum { margin-bottom: 18px; }
+  .stack > * + * { margin-top: 0; }
+}

@@ -205,7 +205,7 @@
     var heroSec = heroVisual.closest('.hero');
     heroSec.addEventListener('pointermove', function (e) {
       var r = heroSec.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5;
-      heroVisual.style.transform = 'perspective(1200px) rotateY(' + (dx * 6).toFixed(2) + 'deg) rotateX(' + (-dy * 6).toFixed(2) + 'deg)';
+      heroVisual.style.transform = 'perspective(1400px) rotateY(' + (dx * 2.5).toFixed(2) + 'deg) rotateX(' + (-dy * 2.5).toFixed(2) + 'deg)';
     });
     heroSec.addEventListener('pointerleave', function () { heroVisual.style.transform = ''; });
   }
@@ -220,12 +220,11 @@
       var kids = Array.prototype.filter.call(st.children, function (c) { return c.nodeType === 1; });
       kids.forEach(function (card, i) {
         card.style.setProperty('--i', i);
-        if (on && i < kids.length - 1) { var hgt = card.offsetHeight; card.style.marginBottom = (-(Math.max(0, hgt - 260))) + 'px'; } else card.style.marginBottom = '';
         if (!on || i === kids.length - 1) { if (card.classList.contains('in') || !card.classList.contains('reveal')) card.style.transform = ''; return; }
         var r = card.getBoundingClientRect(), n = kids[i + 1].getBoundingClientRect();
         if (n.top < r.bottom) {
           var p = Math.max(0, Math.min(1, (n.top - r.top) / r.height));
-          if (card.classList.contains('in') || !card.classList.contains('reveal')) card.style.transform = 'scale(' + (0.9 + 0.1 * p).toFixed(3) + ')';
+          if (card.classList.contains('in') || !card.classList.contains('reveal')) card.style.transform = 'scale(' + (0.94 + 0.06 * p).toFixed(3) + ')';
         } else if (card.classList.contains('in') || !card.classList.contains('reveal')) card.style.transform = '';
       });
     });
