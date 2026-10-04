@@ -7,7 +7,18 @@ Aufruf: python3 tools/gen-pages.py
 import re, html as H
 import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import hashlib
+def _stamp():
+    h = hashlib.sha1()
+    for f in ('css/regenschild.css', 'js/regenschild.js'):
+        h.update(open(f'{ROOT}/{f}', 'rb').read())
+    return h.hexdigest()[:8]
+STAMP = _stamp()
 idx = open(f'{ROOT}/index.html', encoding='utf-8').read()
+# Versionsnummer an CSS/JS-Verweise hängen (Cache-Umgehung), auch in index.html
+idx = re.sub(r'css/regenschild\.css(\?v=\w+)?', f'css/regenschild.css?v={STAMP}', idx)
+idx = re.sub(r'js/regenschild\.js(\?v=\w+)?', f'js/regenschild.js?v={STAMP}', idx)
+open(f'{ROOT}/index.html', 'w', encoding='utf-8').write(idx)
 head = idx[:idx.index('<!--HEADER-->')]
 header = re.search(r'<!--HEADER-->.*?<!--/HEADER-->', idx, re.S).group(0)
 footer = re.search(r'<!--FOOTER-->.*?<!--/FOOTER-->', idx, re.S).group(0)
@@ -207,7 +218,7 @@ def sys_card(s, compact=False):
 def page_shell(fn, title, desc, body):
     h = head.replace('<title>Regenschild Unwetterschutz</title>', f'<title>{title}</title>')
     h = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{H.escape(desc)}">', h)
-    out = h + header + '\n<main id="content">\n' + body + '\n</main>\n' + footer + '\n\n<script src="js/regenschild.js"></script>\n</body>\n</html>\n'
+    out = h + header + '\n<main id="content">\n' + body + '\n</main>\n' + footer + f'\n\n<script src="js/regenschild.js?v={STAMP}"></script>\n</body>\n</html>\n'
     open(f'{ROOT}/{fn}', 'w', encoding='utf-8').write(out)
 
 def hero(kicker, h1, text, img, btn1, href1, btn2, href2, extra=''):
@@ -513,7 +524,7 @@ for fn, d in PAGES.items():
 
 </main>
 '''
-    out = h + header + body + '\n' + footer + '\n\n<script src="js/regenschild.js"></script>\n</body>\n</html>\n'
+    out = h + header + body + '\n' + footer + f'\n\n<script src="js/regenschild.js?v={STAMP}"></script>\n</body>\n</html>\n'
     open(f'{ROOT}/{fn}', 'w', encoding='utf-8').write(out)
     print(fn, len(out) // 1024, 'KB')
 

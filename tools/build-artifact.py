@@ -26,8 +26,8 @@ used_images = set()
 
 for page in PAGES:
     html = open(os.path.join(ROOT, page), encoding='utf-8').read()
-    html = html.replace('<link rel="stylesheet" href="css/regenschild.css">', '<style>\n' + css + '\n</style>')
-    html = html.replace('<script src="js/regenschild.js"></script>', '<script>\n' + js + '\n</script>')
+    html = re.sub(r'<link rel="stylesheet" href="css/regenschild\.css[^"]*">', lambda m: '<style>\n' + css + '\n</style>', html)
+    html = re.sub(r'<script src="js/regenschild\.js[^"]*"></script>', lambda m: '<script>\n' + js + '\n</script>', html)
     used_images.update(re.findall(r'img/((?:logo/)?[\w.-]+\.(?:webp|png))', html))
     if page == 'index.html':
         title = re.search(r'<title>(.*?)</title>', html, re.S).group(1)
