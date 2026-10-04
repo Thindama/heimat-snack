@@ -6,7 +6,7 @@ Website für Regenschild: Schutz vor Starkregen, Sturm und Hagel in Hegau, am Bo
 
 | Datei | Inhalt |
 |---|---|
-| `index.html` | Startseite: Hero, Faktenband, 4 Kernvorteile, KI-Check als Schrittfolge, Ansprechpartner, drei Säulen, Leistungen, Pakete, Ablauf in 4 Schritten, Vergleich, Zielgruppen, Unwetter-Wissen, FAQ, Anfrage-Formular |
+| `index.html` | Startseite: Hero mit Glas-Karte, Faktenband, drei Momente (emotionale Szenen), KI-Check als Schrittfolge, 4 Kernvorteile, drei Säulen, Versprechen, Ansprechpartner, Leistungen, Pakete, Ablauf, Social Proof, Vergleich, Zielgruppen, Wissen, FAQ, Anfrage-Formular |
 | `starkregen.html` | Säule 1: Kennzahlen, Prüfen / Schützen / Systeme / Im Notfall, weitere Säulen |
 | `sturm.html` | Säule 2: Kennzahlen, Prüfen / Schützen / Systeme / Im Notfall, weitere Säulen |
 | `hagel.html` | Säule 3: Kennzahlen, Prüfen / Schützen / Systeme / Im Notfall, weitere Säulen |
@@ -33,6 +33,10 @@ Der Check auf der Startseite läuft als Schrittfolge: Adresse, Gebäudeart, Kell
 
 Die Dienste sind kostenlos nutzbar; bei hohem Aufkommen sollten eigene Schlüssel oder ein eigener Server dazwischen geschaltet werden.
 
+## Handy
+
+Auf schmalen Bildschirmen stapeln sich Karten (`stack`): Die nächste Karte schiebt sich über die vorherige, die Seite wird kürzer. Leistungen, Wissen und Kundenstimmen laufen als Wischleiste (`snap`) mit Punkten. Der Header liegt über dem Hero transparent mit weißem Logo und wird beim Scrollen zur Glasleiste.
+
 ## Animationen
 
 - Hero: Regen, schräger Sturmregen oder Hagel je nach Seite, gelegentliches Wetterleuchten, Parallax-Hintergrund, gestaffelter Einstieg
@@ -50,6 +54,8 @@ Platzhalter sind gelb gestrichelt markiert (Klasse `ph`) und stehen in allen vie
 - `[Telefon]`, `[WhatsApp]`, `[E-Mail]`, `[Adresse]`
 - `[Preis]` für Vor-Ort-Check und Wartungsabo (Pakete und FAQ auf der Startseite)
 - `[Impressum]`, `[Datenschutz]` im Footer (Links auf eigene Seiten setzen)
+- Social Proof auf der Startseite: drei Kundenstimmen sind als Beispiel markiert (`sample`) und müssen durch echte ersetzt werden; dazu `[Zahl]` für geprüfte Gebäude und eingebaute Systeme sowie die Partnerbetriebe
+- Über uns: `[Kurzvorstellung]`, `[Stundensatz]`, Partnerbetriebe
 - WhatsApp-Button: in `js/regenschild.js` die Nummer bei `KONTAKT.whatsapp` eintragen (international, ohne `+`), dann wird der Button „Per WhatsApp senden“ aktiv.
 
 ## Lokal ansehen

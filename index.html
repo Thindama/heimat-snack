@@ -17,7 +17,7 @@
 <header class="site-header" id="header">
   <div class="container header-inner">
     <a class="logo" href="index.html" aria-label="Regenschild – Startseite">
-      <img src="img/logo/regenschild-logo.png" width="250" height="60" alt="Regenschild">
+      <img class="logo-dark" src="img/logo/regenschild-logo.png" width="250" height="60" alt="Regenschild"><img class="logo-light" src="img/logo/regenschild-logo-white.png" width="250" height="60" alt="" aria-hidden="true">
     </a>
     <nav class="main-nav" id="main-nav" aria-label="Hauptnavigation">
       <ul class="menu">
@@ -54,28 +54,43 @@
 <main id="content">
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero hero-v2">
+  <div class="aurora" aria-hidden="true"></div>
   <div class="container">
-    <div class="hero-content">
-      <h1 class="hero-kicker">Unwetterschutz in Hegau, am Bodensee und in der Ostschweiz</h1>
-      <h2 class="hero-title">Schutz vor <span class="accent">Regen, Sturm und Hagel</span></h2>
-      <p class="hero-text">Regenschild schützt Häuser und Gebäude in Hegau, am Bodensee und in der Ostschweiz vor Unwetterschäden. Von der Analyse über den Einbau bis zur Wartung – alles aus einer Hand.</p>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="#ki-check">KI-Check starten</a>
-        <a class="btn btn-outline-white" href="#kontakt">Fotos schicken</a>
+    <div class="hero-grid">
+      <div class="hero-content">
+        <p class="hero-kicker"><i aria-hidden="true"></i>Unwetterschutz · Hegau · Bodensee · Ostschweiz</p>
+        <h1 class="hero-title h-shine">Wenn der Himmel aufreißt, bleibt Ihr Haus ruhig.</h1>
+        <p class="hero-text">Starkregen, Sturm und Hagel treffen dasselbe Haus. Regenschild schützt es als Ganzes: ein Check, ein Schutzkonzept mit Festpreis, ein Ansprechpartner – von der ersten Einschätzung bis zur jährlichen Wartung.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary btn-lg" href="#ki-check">KI-Check starten</a>
+          <a class="btn btn-outline-white btn-lg" href="#kontakt">Fotos schicken</a>
+        </div>
+        <ul class="trust-row">
+          <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>KI-Erstcheck kostenlos</li>
+          <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>Schutzkonzept zum Festpreis</li>
+          <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>Ein Ansprechpartner für alles</li>
+        </ul>
       </div>
-      <p class="hero-text" style="font-size:15px;margin:0">Fotos per WhatsApp schicken, erste Einschätzung in wenigen Minuten.</p>
-      <ul class="trust-row">
-        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>KI-Erstcheck kostenlos</li>
-        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>Schutzkonzept zum Festpreis</li>
-        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg>Ein Ansprechpartner für alles</li>
-      </ul>
+      <div class="hero-visual">
+        <div class="radar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="glass hero-card" id="heroCard">
+          <div class="hero-card-head"><b>Ihr Risikoprofil</b><span><i aria-hidden="true"></i>Live-Daten</span></div>
+          <div class="gauge"><div class="gauge-head"><span>Starkregen</span><span class="lvl lvl--3" data-hl="hoch">offen</span></div><div class="gauge-bar"><div class="gauge-fill" data-w="78"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span>Sturm</span><span class="lvl lvl--2" data-hl="mittel">offen</span></div><div class="gauge-bar"><div class="gauge-fill" data-w="52"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span>Hagel</span><span class="lvl lvl--1" data-hl="niedrig">offen</span></div><div class="gauge-bar"><div class="gauge-fill" data-w="24"></div></div></div>
+          <div class="hero-card-foot"><span>Wetterarchiv, Höhenlage und Ihre Angaben – in zwei Minuten.</span><a href="#ki-check">Jetzt prüfen →</a></div>
+        </div>
+        <div class="glass chip-float a"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Einsatz-Service bei Unwetterwarnung</div>
+        <div class="glass chip-float b"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Festpreis nach dem Check</div>
+      </div>
     </div>
   </div>
+  <a class="scroll-cue" href="#fakten" aria-label="Nach unten"></a>
 </section>
 
 <!-- FAKTENLEISTE -->
-<section class="clients" aria-label="Unwetter-Kennzahlen">
+<section class="clients" id="fakten" aria-label="Unwetter-Kennzahlen">
   <div class="marquee" id="client-marquee">
     <div class="marquee-track">
       <span class="fact"><b data-count="25">25</b><span class="u">l/m² in 1 h</span>ab hier gilt Starkregen als Unwetter</span>
@@ -89,16 +104,17 @@
   </div>
 </section>
 
-<!-- 4 KERNVORTEILE -->
-<section class="section benefits">
+<!-- MOMENTE -->
+<section class="moments" id="momente">
+  <div class="aurora" aria-hidden="true"></div>
   <div class="container">
-    <p class="kicker">4 Kernvorteile</p>
-    <h2>Alles aus einer Hand. Schutz, der bleibt.</h2>
-    <div class="grid-4 benefits-grid">
-      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5M3 16l9 5 9-5"/></svg></div><h3>Alles aus einer Hand</h3><p>Analyse, Verkauf, Montage und Wartung. Sie koordinieren keine fünf Handwerker, sondern haben einen Ansprechpartner.</p></div>
-      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18"/></svg></div><h3>Schutz auch im Urlaub</h3><p>Mobile Systeme schützen nur, wenn jemand sie rechtzeitig einsetzt. Unser Einsatz-Service übernimmt das für Sie.</p></div>
-      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg></div><h3>Schnelle Einschätzung per KI</h3><p>Fotos schicken genügt für eine erste Bewertung – ohne Termin und ohne Wartezeit.</p></div>
-      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Betreuung nach dem Einbau</h3><p>Wartung, Alarm und Re-Check sorgen dafür, dass Ihr Schutz auch in fünf Jahren noch funktioniert.</p></div>
+    <p class="kicker">Drei Nächte, die niemand vergisst</p>
+    <h2 class="light h-shine">Unwetter fragen nicht, ob es gerade passt.</h2>
+    <p class="lead">Die meisten Schäden entstehen nicht, weil niemand gewarnt hat. Sondern weil niemand da war, der wusste, was zu tun ist.</p>
+    <div class="moment-grid stack" style="--stack-top:80px">
+      <article class="moment"><img src="img/rain-roof.webp" alt="" loading="lazy"><div class="time">Donnerstag · 23:40 Uhr</div><h3>Das Wasser kommt nicht vom Fluss. Es kommt von der Straße.</h3><p>Vierzig Liter in einer Stunde. Der Kanal ist voll, der Lichtschacht läuft über, und im Keller steht das Wasser dreißig Zentimeter hoch – zwischen Heizung, Waschmaschine und den Kisten mit den Kinderfotos.</p><div class="after"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><b>Mit Regenschild:</b> Dichtschott und Rückstausicherung sind längst drin. Der Alarm kam um 21:10 Uhr aufs Handy. Der Keller bleibt trocken.</span></div></article>
+      <article class="moment"><img src="img/lightning-house.webp" alt="" loading="lazy"><div class="time">Samstag · 03:15 Uhr</div><h3>Der Sturm nimmt sich, was nicht festgemacht ist.</h3><p>Böen mit 110 km/h. Erst klappert die Markise, dann fliegen die ersten Ziegel. Am Morgen liegt der Dachfirst im Garten und der Regen zieht ins Haus – und niemand erreicht einen Dachdecker.</p><div class="after"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><b>Mit Regenschild:</b> Sturmklammern sitzen seit dem Drohnen-Check, die Markise ist um 2 Uhr automatisch eingefahren. Schlafen Sie weiter.</span></div></article>
+      <article class="moment"><img src="img/hail-ground.webp" alt="" loading="lazy"><div class="time">Sonntag · 16:50 Uhr</div><h3>Vier Minuten Hagel. Ein Jahr Ärger.</h3><p>Körner wie Golfbälle. Dachfenster gesprungen, Solarmodule gerissen, Rollläden verbeult, das Auto übersät. Die Versicherung will Fotos, Rechnungen, Nachweise – und Sie wissen nicht, wo anfangen.</p><div class="after"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6"/></svg><span><b>Mit Regenschild:</b> Hagelfeste Fenster, Module mit HW 4, Rollläden hochgefahren bei Warnung. Und wenn doch etwas passiert: Wir dokumentieren alles.</span></div></article>
     </div>
   </div>
 </section>
@@ -225,21 +241,16 @@
   </div>
 </section>
 
-<!-- INTRO -->
-<section class="section intro">
-  <div class="container two-col">
-    <div class="col-text">
-      <p class="kicker">Was braucht ein geschütztes Haus?</p>
-      <h2>Ihr Haus ist so sicher wie seine schwächste Stelle</h2>
-      <p>Starkregen kommt über die Straße, das Grundstück oder die Kanalisation – auch fernab von Flüssen. Sturm greift Dach, Bäume und Anbauten an. Hagel trifft Dachfenster, Solarmodule und Fassaden in Minuten. Die meisten Schäden entstehen an Stellen, die vorher niemand geprüft hat.</p>
-      <p>Deshalb prüfen wir jede der drei Säulen einzeln und schützen sie zusammen: ein Check, ein Schutzkonzept mit Festpreis, ein Ansprechpartner – von der ersten Einschätzung bis zum jährlichen Re-Check.</p>
-      <a class="btn btn-primary" href="#kontakt">Hier kostenlosen Erstcheck anfragen</a>
-    </div>
-    <div class="col-media">
-      <div class="office-card">
-        <img class="office-img" src="img/clouds-farmhouse.webp" width="1600" height="1067" alt="Wohnhäuser unter aufziehenden Gewitterwolken">
-        <div class="nametag"><strong>Amandeep Thind</strong><span>Geschäftsführer</span><span>Ihr Ansprechpartner vom Erstcheck bis zur Wartung</span></div>
-      </div>
+<!-- 4 KERNVORTEILE -->
+<section class="section benefits">
+  <div class="container">
+    <p class="kicker">4 Kernvorteile</p>
+    <h2>Alles aus einer Hand. Schutz, der bleibt.</h2>
+    <div class="grid-4 benefits-grid stack" style="--stack-top:86px">
+      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5M3 16l9 5 9-5"/></svg></div><h3>Alles aus einer Hand</h3><p>Analyse, Verkauf, Montage und Wartung. Sie koordinieren keine fünf Handwerker, sondern haben einen Ansprechpartner.</p></div>
+      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18"/></svg></div><h3>Schutz auch im Urlaub</h3><p>Mobile Systeme schützen nur, wenn jemand sie rechtzeitig einsetzt. Unser Einsatz-Service übernimmt das für Sie.</p></div>
+      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg></div><h3>Schnelle Einschätzung per KI</h3><p>Fotos schicken genügt für eine erste Bewertung – ohne Termin und ohne Wartezeit.</p></div>
+      <div class="benefit"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Betreuung nach dem Einbau</h3><p>Wartung, Alarm und Re-Check sorgen dafür, dass Ihr Schutz auch in fünf Jahren noch funktioniert.</p></div>
     </div>
   </div>
 </section>
@@ -249,7 +260,7 @@
   <div class="container narrow">
     <h2 class="center">Starkregen. Sturm. Hagel.</h2>
     <p class="kicker center">Drei Säulen, ein Schutzkonzept</p>
-    <div class="grid-3 results-grid">
+    <div class="grid-3 results-grid stack" style="--stack-top:86px">
       <article class="result-card pillar">
         <div class="pillar-shot"><img src="img/rain-roof.webp" alt="Regenwasser läuft über ein Ziegeldach" width="1920" height="1280"></div>
         <h3>Starkregen</h3>
@@ -287,12 +298,42 @@
   </div>
 </section>
 
+<!-- MANIFEST -->
+<section class="manifesto mesh" id="versprechen">
+  <div class="container">
+    <p class="line" style="--i:0">Ein Haus ist mehr als Mauern.</p>
+    <p class="line dim" style="--i:1">Es ist der Ort, an dem Ihre Kinder schlafen, während es draußen tobt.</p>
+    <p class="line" style="--i:2">Deshalb schützen wir es nicht gegen ein Unwetter. Sondern gegen alle drei.</p>
+    <p class="sig"><b>Amandeep Thind</b>Geschäftsführer Regenschild</p>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="section intro">
+  <div class="container two-col">
+    <div class="col-text">
+      <p class="kicker">Was braucht ein geschütztes Haus?</p>
+      <h2>Ihr Haus ist so sicher wie seine schwächste Stelle</h2>
+      <p>Starkregen kommt über die Straße, das Grundstück oder die Kanalisation – auch fernab von Flüssen. Sturm greift Dach, Bäume und Anbauten an. Hagel trifft Dachfenster, Solarmodule und Fassaden in Minuten. Die meisten Schäden entstehen an Stellen, die vorher niemand geprüft hat.</p>
+      <p>Deshalb prüfen wir jede der drei Säulen einzeln und schützen sie zusammen: ein Check, ein Schutzkonzept mit Festpreis, ein Ansprechpartner – von der ersten Einschätzung bis zum jährlichen Re-Check.</p>
+      <a class="btn btn-primary" href="#kontakt">Hier kostenlosen Erstcheck anfragen</a>
+    </div>
+    <div class="col-media">
+      <div class="office-card">
+        <img class="office-img" src="img/clouds-farmhouse.webp" width="1600" height="1067" alt="Wohnhäuser unter aufziehenden Gewitterwolken">
+        <div class="nametag"><strong>Amandeep Thind</strong><span>Geschäftsführer</span><span>Ihr Ansprechpartner vom Erstcheck bis zur Wartung</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- LEISTUNGEN -->
 <section class="section services" id="leistungen">
   <div class="container narrow">
     <h2>Für alle Unwetter</h2>
     <p class="kicker">Diese Leistungen schützen Ihr Haus gegen Regen, Sturm und Hagel gleichzeitig.</p>
-    <div class="grid-4 services-grid">
+    <div class="grid-4 services-grid snap">
+
       <div class="service-card"><svg class="s" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2"/><path d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/><path d="M9.5 13l2 2 3.5-4"/></svg><h3>Unwetter-Check</h3><p>Per KI aus Ihren Fotos und persönlich vor Ort. Sie erhalten einen schriftlichen Bericht mit Schwachstellen, Maßnahmen und Kosten.</p></div>
       <div class="service-card"><svg class="s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><rect x="9" y="9" width="6" height="6" rx="1.5"/><path d="M7 7.5l2 2M17 7.5l-2 2M7 16.5l2-2M17 16.5l-2-2"/></svg><h3>Drohnen-Inspektion</h3><p>Wir prüfen Dach, Fassade und Solaranlage aus der Luft – ohne Gerüst und ohne Risiko.</p></div>
       <div class="service-card"><svg class="s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><h3>Unwetter-Alarm</h3><p>Bei Starkregen-, Sturm- oder Hagelwarnung bekommen Sie eine WhatsApp-Nachricht mit konkreten Handlungsschritten.</p></div>
@@ -308,7 +349,7 @@
 <!-- PAKETE -->
 <section class="section pricing dark-radial" id="pakete">
   <div class="container narrow">
-    <h2 class="center light">Ihr Schutz zum <span class="accent">Festpreis</span></h2>
+    <h2 class="center light h-shine">Ihr Schutz zum <span class="accent">Festpreis</span></h2>
     <p class="kicker center light">Vom kostenlosen Erstcheck bis zum Wartungsabo</p>
     <div class="grid-4 pricing-grid">
       <article class="price-card">
@@ -349,12 +390,32 @@
       </div>
       <a class="btn btn-primary" href="#kontakt">Schritt 1 starten: Fotos schicken</a>
     </div>
-    <div class="grid-4 steps-grid">
+    <div class="grid-4 steps-grid stack" style="--stack-top:96px">
       <div class="step"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></div><h3>1. KI-Erstcheck</h3><p>Sie schicken Fotos und Adresse per WhatsApp oder über die Website. Sie bekommen sofort eine erste Einschätzung zu Ihren Schwachstellen.</p></div>
       <div class="step"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M9 11l1.5 1.5L13.5 9"/></svg></div><h3>2. Vor-Ort-Check</h3><p>Wir prüfen Ihr Gebäude persönlich, dokumentieren alle Risiken und erstellen ein Schutzkonzept mit Festpreis.</p></div>
       <div class="step"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 7.5a4.5 4.5 0 0 1-6 4.3L7 19.3a2 2 0 0 1-2.8-2.8l7.5-7.5a4.5 4.5 0 0 1 5.6-5.6L14.5 6.2l3.3 3.3 2.7-2z"/></svg></div><h3>3. Umsetzung</h3><p>Wir liefern und montieren. Arbeiten, die einen Meisterbetrieb erfordern, übernehmen unsere geprüften Partner. Ihr Ansprechpartner bleiben wir.</p></div>
       <div class="step"><div class="icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>4. Betreuung</h3><p>Wartung, Unwetter-Alarm und ein jährlicher Re-Check halten Ihren Schutz einsatzbereit.</p></div>
     </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="section proof" id="stimmen">
+  <div class="container">
+    <div class="section-head"><div><p class="kicker">Was Kunden sagen</p><h2>Schutz, den man erst bemerkt, wenn es darauf ankommt</h2></div></div>
+    <div class="proof-numbers stack" style="--stack-top:90px">
+      <div class="pnum"><b><span class="ph">[Zahl]</span></b><span>geprüfte Gebäude in Hegau, Bodensee und Ostschweiz</span></div>
+      <div class="pnum"><b><span class="ph">[Zahl]</span></b><span>Schutzsysteme eingebaut, jedes mit Probeeinbau übergeben</span></div>
+      <div class="pnum"><b>24 h</b><span>Reaktionszeit im Notfall für Abo-Kunden</span></div>
+      <div class="pnum"><b>3 Säulen</b><span>Starkregen, Sturm und Hagel aus einer Hand</span></div>
+    </div>
+    <div class="quote-grid snap">
+      <figure class="quote"><div class="stars" aria-label="5 von 5 Sternen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></div><blockquote>„Beim letzten Starkregen stand bei den Nachbarn das Wasser im Keller. Bei uns nicht. Die Rückstausicherung und das Dichtschott hatten wir drei Wochen vorher eingebaut bekommen – mit Probeeinbau und Einweisung.“</blockquote><figcaption><b><span class="ph">[Name]</span></b><span>Singen · Einfamilienhaus</span></figcaption><span class="sample">Beispiel – durch echte Kundenstimme ersetzen</span></figure>
+      <figure class="quote"><div class="stars" aria-label="5 von 5 Sternen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></div><blockquote>„Wir verwalten 14 Objekte. Regenschild hat alle geprüft, eine Prioritätenliste erstellt und die Wartung übernommen. Für die Eigentümerversammlung bekommen wir einen Bericht pro Gebäude.“</blockquote><figcaption><b><span class="ph">[Name]</span></b><span>Konstanz · Hausverwaltung</span></figcaption><span class="sample">Beispiel – durch echte Kundenstimme ersetzen</span></figure>
+      <figure class="quote"><div class="stars" aria-label="5 von 5 Sternen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></div><blockquote>„Der KI-Check hat gezeigt, dass unser Grundstück tiefer liegt als die Straße. Das wussten wir gar nicht. Zwei Wochen später war der Vor-Ort-Check, vier Wochen später das Klappschott an der Garage.“</blockquote><figcaption><b><span class="ph">[Name]</span></b><span>Kreuzlingen · Doppelhaushälfte</span></figcaption><span class="sample">Beispiel – durch echte Kundenstimme ersetzen</span></figure>
+    </div>
+    <div class="snap-hint" aria-hidden="true"></div>
+    <div class="partners"><span>Ausführung mit geprüften Meisterbetrieben aus der Region</span><div class="partner-row"><span class="ph">[Dachdecker-Partner]</span><span class="ph">[Metallbau-Partner]</span><span class="ph">[Sanitär-Partner]</span><span class="ph">[Elektro-Partner]</span></div></div>
   </div>
 </section>
 
@@ -422,7 +483,7 @@
 <section class="section glossary" id="wissen">
   <div class="container">
     <h2 class="center">Unwetter-Wissen</h2>
-    <div class="grid-3 glossary-grid">
+    <div class="grid-3 glossary-grid snap">
       <article class="post-card">
         <a href="starkregen.html#pruefen" class="post-img"><img src="img/rain-ground.webp" width="1400" height="951" alt="" loading="lazy"></a>
         <div class="post-body"><h3><a href="starkregen.html#pruefen">Warum der Keller auch ohne Fluss volläuft</a></h3><div class="post-cats"><a href="starkregen.html">Starkregen</a></div><p>Die Rückstauebene liegt auf Höhe der Straßenoberkante. Ist der Kanal voll, drückt Wasser durch jeden Abfluss darunter zurück ins Haus – auch Kilometer vom nächsten Gewässer entfernt.</p></div>
@@ -462,7 +523,7 @@
 <!-- CTA BANNER -->
 <section class="cta-banner">
   <div class="container">
-    <h2 class="center light"><span class="accent">Das nächste Unwetter</span> kommt bestimmt. Ihr Haus ist bereit.</h2>
+    <h2 class="center light h-shine"><span class="accent">Das nächste Unwetter</span> kommt bestimmt. Ihr Haus ist bereit.</h2>
     <p class="center light">Schicken Sie uns ein paar Fotos Ihres Hauses und erhalten Sie in wenigen Minuten eine erste Einschätzung – kostenlos und unverbindlich.</p>
     <div class="center"><a class="btn btn-primary btn-lg" href="#kontakt">Jetzt Haus kostenlos prüfen lassen</a></div>
   </div>
@@ -482,7 +543,7 @@
         <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>Adresse: <span class="ph">[Adresse]</span></li>
       </ul>
       <p class="kicker" style="margin-top:28px">Einsatzgebiet</p>
-      <ul class="area"><li>Hegau</li><li>Landkreis Konstanz</li><li>Bodensee</li><li>Ostschweiz</li></ul>
+      <ul class="area-list"><li>Hegau</li><li>Landkreis Konstanz</li><li>Bodensee</li><li>Ostschweiz</li></ul>
     </div>
     <form class="form" id="inquiry" novalidate>
       <h3>Jetzt Haus kostenlos prüfen lassen</h3>

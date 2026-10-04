@@ -17,6 +17,7 @@
     toggle.addEventListener('click', function () {
       var open = nav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var hd = $('header'); if (hd) hd.classList.toggle('menu-open', open);
     });
     nav.querySelectorAll('.menu > .menu-item > a').forEach(function (link) {
       link.addEventListener('click', function (e) {
@@ -31,7 +32,7 @@
       });
     });
     nav.querySelectorAll('.sub a, .mega a, .menu-item:not(.has-sub):not(.has-mega) > a, .main-nav > .btn').forEach(function (a) {
-      a.addEventListener('click', function () { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); });
+      a.addEventListener('click', function () { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); var hd = $('header'); if (hd) hd.classList.remove('menu-open'); });
     });
     document.addEventListener('click', function (e) {
       if (!nav.contains(e.target) && !toggle.contains(e.target)) nav.querySelectorAll('.menu-item.open').forEach(function (o) { o.classList.remove('open'); });
@@ -116,19 +117,19 @@
   /* Reveal-Varianten */
   [
     ['.benefit', ''], ['.service-card', ''], ['.post-card', ''], ['.step', ''], ['.keyfact', ''],
-    ['.result-card', 'tilt'], ['.price-card', 'zoom'], ['.case-card', 'zoom'], ['.form', ''], ['.emergency', 'from-left'],
+    ['.result-card', 'tilt'], ['.price-card', 'zoom'], ['.case-card', 'zoom'], ['.form', ''], ['.emergency', 'from-left'], ['.moment', 'zoom'], ['.pnum', ''], ['.quote', ''],
     ['.office-card', 'from-right'], ['.compare-card.others', 'from-left'], ['.compare-card.us', 'from-right']
   ].forEach(function (r) {
     each(r[0], function (el) { el.classList.add('reveal'); if (r[1]) el.classList.add(r[1]); });
   });
   stagger('.benefit'); stagger('.service-card'); stagger('.post-card', 3); stagger('.step'); stagger('.result-card', 3); stagger('.price-card');
-  stagger('.trust-row li', 6); stagger('.keyfacts .keyfact', 6); stagger('.acc-item', 8);
+  stagger('.trust-row li', 6); stagger('.moment', 3); stagger('.pnum'); stagger('.quote', 3); stagger('.keyfacts .keyfact', 6); stagger('.acc-item', 8);
   each('.icon-list', function (ul) {
     if (ul.closest('.hero') || ul.closest('.site-footer')) return;
     ul.classList.add('stagger');
     Array.prototype.forEach.call(ul.children, function (li, i) { li.style.setProperty('--i', i); });
   });
-  onView(all('.reveal, .kicker, .steps-grid, .footer-brand, .icon-list.stagger, .accordion, .faq .container'), addIn);
+  onView(all('.reveal, .kicker, .steps-grid, .footer-brand, .icon-list.stagger, .accordion, .faq .container, .manifesto'), addIn);
 
   /* Bilder mit Wisch-Effekt */
   each('.pillar-shot, .post-img, .phase-img, .team-img, .office-img', function (el) { el.classList.add('wipe'); });
@@ -191,6 +192,61 @@
     wxLayers.forEach(function (w) { wio.observe(w); });
   }
 
+  /* Hero-Karte: Balken und Stufen beim Laden */
+  var heroCard = $('heroCard');
+  if (heroCard) {
+    setTimeout(function () {
+      each('#heroCard .gauge-fill', function (f) { f.style.width = f.getAttribute('data-w') + '%'; });
+      each('#heroCard .lvl', function (l) { l.textContent = l.getAttribute('data-hl'); });
+    }, reduce ? 0 : 1300);
+  }
+  var heroVisual = document.querySelector('.hero-visual');
+  if (heroVisual && motion && window.matchMedia('(min-width: 1025px)').matches) {
+    var heroSec = heroVisual.closest('.hero');
+    heroSec.addEventListener('pointermove', function (e) {
+      var r = heroSec.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5;
+      heroVisual.style.transform = 'perspective(1200px) rotateY(' + (dx * 6).toFixed(2) + 'deg) rotateX(' + (-dy * 6).toFixed(2) + 'deg)';
+    });
+    heroSec.addEventListener('pointerleave', function () { heroVisual.style.transform = ''; });
+  }
+
+  /* Stapelkarten auf dem Handy: untere Karte schiebt sich über die obere */
+  var stacks = all('.stack');
+  var isStackView = function () { return window.matchMedia('(max-width: 1024px)').matches; };
+  function updateStacks() {
+    if (!stacks.length) return;
+    var on = isStackView();
+    stacks.forEach(function (st) {
+      var kids = Array.prototype.filter.call(st.children, function (c) { return c.nodeType === 1; });
+      kids.forEach(function (card, i) {
+        card.style.setProperty('--i', i);
+        if (on && i < kids.length - 1) { var hgt = card.offsetHeight; card.style.marginBottom = (-(Math.max(0, hgt - 260))) + 'px'; } else card.style.marginBottom = '';
+        if (!on || i === kids.length - 1) { if (card.classList.contains('in') || !card.classList.contains('reveal')) card.style.transform = ''; return; }
+        var r = card.getBoundingClientRect(), n = kids[i + 1].getBoundingClientRect();
+        if (n.top < r.bottom) {
+          var p = Math.max(0, Math.min(1, (n.top - r.top) / r.height));
+          if (card.classList.contains('in') || !card.classList.contains('reveal')) card.style.transform = 'scale(' + (0.9 + 0.1 * p).toFixed(3) + ')';
+        } else if (card.classList.contains('in') || !card.classList.contains('reveal')) card.style.transform = '';
+      });
+    });
+  }
+
+  /* Wischleisten: Punkte unter der Leiste */
+  each('.snap', function (snap) {
+    var hint = snap.nextElementSibling && snap.nextElementSibling.classList.contains('snap-hint') ? snap.nextElementSibling : null;
+    if (!hint) { hint = document.createElement('div'); hint.className = 'snap-hint'; hint.setAttribute('aria-hidden', 'true'); snap.after(hint); }
+    var kids = Array.prototype.filter.call(snap.children, function (c) { return c.nodeType === 1; });
+    hint.innerHTML = kids.map(function () { return '<i></i>'; }).join('');
+    var dots = hint.querySelectorAll('i');
+    function upd() {
+      var mid = snap.scrollLeft + snap.clientWidth / 2, best = 0, bd = 1e9;
+      kids.forEach(function (k, i) { var d = Math.abs(k.offsetLeft + k.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = i; } });
+      dots.forEach(function (d, i) { d.classList.toggle('is-on', i === best); });
+    }
+    snap.addEventListener('scroll', function () { requestAnimationFrame(upd); }, { passive: true });
+    upd();
+  });
+
   /* Seite geladen: Hero-Einstieg starten */
   function loaded() { requestAnimationFrame(function () { root.classList.add('is-loaded'); }); }
   if (document.readyState === 'complete') loaded(); else window.addEventListener('load', loaded);
@@ -198,6 +254,7 @@
 
   /* Scroll-gekoppelte Effekte in einem Frame gebündelt */
   var header = $('header'), hero = document.querySelector('.hero'), heroContent = document.querySelector('.hero-content');
+  var darkTop = document.querySelector('main > .hero:first-child, main > section.hero');
   var floating = document.querySelector('.floating-buttons');
   var bar = null;
   if (motion) { bar = document.createElement('div'); bar.className = 'scroll-progress'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar); }
@@ -208,7 +265,11 @@
   function frame() {
     ticking = false;
     var y = window.scrollY, vh = window.innerHeight, docH = document.documentElement.scrollHeight - vh;
-    if (header) header.classList.toggle('is-scrolled', y > 40);
+    if (header) {
+      header.classList.toggle('is-scrolled', y > 40);
+      header.classList.toggle('on-dark', !!darkTop && y < darkTop.offsetHeight - 90);
+    }
+    updateStacks();
     if (floating) floating.classList.toggle('show', !motion || y > (hero ? hero.offsetHeight * 0.6 : 200));
     if (!motion) return;
     bar.style.transform = 'scaleX(' + (docH > 0 ? Math.min(y / docH, 1) : 0) + ')';
